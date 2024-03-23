@@ -7,7 +7,7 @@ namespace alalm3i\EdfaPay;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Http;
 
-class GeneratePaymentUrl
+class PaymentUrlGenerator
 {
     private const API_URL = 'https://api.edfapay.com/payment/initiate';
 
@@ -161,17 +161,15 @@ class GeneratePaymentUrl
         return true;
     }
 
-    private function validatePayload(): bool
+    private function validatePayload(): void
     {
 
-        // Refactor
+        // Refactor and add validate rules for each value.
         foreach ($this->payload as $key => $value) {
             if ($value == '') {
                 throw new \Exception('Missing payload input: '.$key);
             }
         }
-
-        return true;
     }
 
     public function preparePayload()

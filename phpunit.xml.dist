@@ -16,7 +16,7 @@
     backupStaticProperties="false"
 >
     <testsuites>
-        <testsuite name="VendorName Test Suite">
+        <testsuite name="alalm3i Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
@@ -35,4 +35,9 @@
             <directory suffix=".php">./src</directory>
         </include>
     </source>
+    <php>
+        <env name="EDFA_PAY_MERCHANT_KEY" value="a278bc86" />
+        <env name="EDFA_PAY_PASSWORD" value="f168" />
+        <env name="EDFA_PAY_RETURN_URL" value="https://successorFail.com" />
+    </php>
 </phpunit>
