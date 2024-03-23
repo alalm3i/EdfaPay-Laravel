@@ -9,7 +9,7 @@ abstract class EdfaPayNotifications
     /*
      *  $response : is the request content - $requests->getContent()
      */
-    public function __construct(private string $response)
+    public function __construct($response)
     {
         $this->responseArray = $this->toArray($response);
     }

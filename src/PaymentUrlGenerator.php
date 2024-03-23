@@ -105,13 +105,6 @@ class PaymentUrlGenerator
         return $this;
     }
 
-    public function setPayerCountry(string $payer_country)
-    {
-        $this->payer_country = $payer_country;
-
-        return $this;
-    }
-
     public function setTermUrl3ds(string $term_url_3ds)
     {
         $this->term_url_3ds = $term_url_3ds;
