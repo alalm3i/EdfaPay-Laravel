@@ -14,7 +14,8 @@ class EdfaPay
             ->setPayerLastName($input['payer_last_name'])
             ->setPayerEmail($input['payer_email'])
             ->setPayerMobile($input['payer_mobile'])
-            ->setPayerIpAddress($input['payer_ip_address']);
+            ->setPayerIpAddress($input['payer_ip_address'])
+            ->setTermUrl3ds($input['redirect_url']);
 
     }
 }
