@@ -195,7 +195,7 @@ class PaymentUrlGenerator
     public function generate(): string
     {
         $this->preparePayload();
-        $response = Http::post(self::API_URL, $this->payload);
+        $response = Http::asForm()->post(self::API_URL, $this->payload);
 
         $response->throw();
 
