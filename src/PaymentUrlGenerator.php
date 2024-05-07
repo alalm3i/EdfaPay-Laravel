@@ -184,6 +184,11 @@ class PaymentUrlGenerator
             'payer_ip' => $this->payer_ip_address,
             'term_url_3ds' => $this->term_url_3ds,
             'hash' => $this->hash,
+            'req_token' => 'N',
+            'recurring_init' => 'N',
+            'payer_country' => 'SA',
+            'payer_city' => 'Riyadh',
+            'payer_zip' => '12221',
         ];
 
         $this->validatePayload();
