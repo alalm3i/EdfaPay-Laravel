@@ -2,9 +2,14 @@
 
 namespace alalm3i\EdfaPay;
 
+use alalm3i\EdfaPay\Enum\CardType;
+use Illuminate\Support\Facades\Log;
+
 abstract class EdfaPayNotifications
 {
     public array $responseArray = [];
+
+    public CardType $method;
 
     /*
      *  $response : is the request content - $requests->getContent()
@@ -12,16 +17,46 @@ abstract class EdfaPayNotifications
     public function __construct($response)
     {
         $this->responseArray = $this->toArray($response);
+        $this->guessPaymentMethod();
     }
+
+    public function guessPaymentMethod(): void
+    {
+        if (isset($this->responseArray['order_id']))
+        {
+            $this->method = CardType::CARD;
+        }
+        elseif (isset($this->responseArray['order_number']))
+        {
+            $this->method = CardType::APPLEPAY;
+        }
+
+        else
+            Log::error('unknown payment type: ' );
+    }
+    public function isCard(): bool
+    {
+        return $this->method == CardType::CARD;
+    }
+//    public function isApplePay(): bool
+//    {
+//        return $this->method == CardType::APPLEPAY;
+//    }
 
     public function isSale(): bool
     {
-        return $this->responseArray['action'] == 'SALE';
+        if ($this->isCard())
+            return $this->responseArray['action'] == 'SALE';
+        else
+            return $this->responseArray['type'] == 'sale';
     }
 
     public function isSuccess(): bool
     {
-        return $this->responseArray['result'] == 'SUCCESS';
+        if ($this->isCard())
+            return $this->responseArray['result'] == 'SUCCESS';
+        else
+            return $this->responseArray['status'] == 'success';
     }
 
     public function isDeclined(): bool
@@ -36,17 +71,26 @@ abstract class EdfaPayNotifications
 
     public function getStatus(): string
     {
-        return $this->responseArray['status'];
+        if ($this->isCard())
+            return $this->responseArray['status'];
+        else
+            return $this->responseArray['order_status'];
     }
 
     public function getOrderId(): string
     {
-        return $this->responseArray['order_id'];
+        if ($this->isCard())
+            return $this->responseArray['order_id'];
+        else
+            return $this->responseArray['order_number'];
     }
 
     public function getTransactionId(): string
     {
-        return $this->responseArray['trans_id'];
+        if ($this->isCard())
+            return $this->responseArray['trans_id'];
+        else
+            return $this->responseArray['id'];
     }
 
     public function getTransactinoDate(): string
@@ -56,7 +100,18 @@ abstract class EdfaPayNotifications
 
     public function getAmount(): string
     {
-        return $this->responseArray['amount'];
+        if ($this->isCard())
+            return $this->responseArray['amount'];
+        else
+            return $this->responseArray['order_amount'];
+    }
+
+    public function getType(): string
+    {
+        if ($this->isCard())
+            return $this->responseArray['action'];
+        else
+            return $this->responseArray['type'];
     }
 
     public function getJsonResponse(): string
