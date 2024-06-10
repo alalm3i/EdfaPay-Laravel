@@ -22,41 +22,40 @@ abstract class EdfaPayNotifications
 
     public function guessPaymentMethod(): void
     {
-        if (isset($this->responseArray['order_id']))
-        {
+        if (isset($this->responseArray['order_id'])) {
             $this->method = CardType::CARD;
-        }
-        elseif (isset($this->responseArray['order_number']))
-        {
+        } elseif (isset($this->responseArray['order_number'])) {
             $this->method = CardType::APPLEPAY;
+        } else {
+            Log::error('unknown payment type: ');
         }
-
-        else
-            Log::error('unknown payment type: ' );
     }
+
     public function isCard(): bool
     {
         return $this->method == CardType::CARD;
     }
-//    public function isApplePay(): bool
-//    {
-//        return $this->method == CardType::APPLEPAY;
-//    }
+    //    public function isApplePay(): bool
+    //    {
+    //        return $this->method == CardType::APPLEPAY;
+    //    }
 
     public function isSale(): bool
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['action'] == 'SALE';
-        else
+        } else {
             return $this->responseArray['type'] == 'sale';
+        }
     }
 
     public function isSuccess(): bool
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['result'] == 'SUCCESS';
-        else
+        } else {
             return $this->responseArray['status'] == 'success';
+        }
     }
 
     public function isDeclined(): bool
@@ -71,26 +70,29 @@ abstract class EdfaPayNotifications
 
     public function getStatus(): string
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['status'];
-        else
+        } else {
             return $this->responseArray['order_status'];
+        }
     }
 
     public function getOrderId(): string
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['order_id'];
-        else
+        } else {
             return $this->responseArray['order_number'];
+        }
     }
 
     public function getTransactionId(): string
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['trans_id'];
-        else
+        } else {
             return $this->responseArray['id'];
+        }
     }
 
     public function getTransactinoDate(): string
@@ -100,18 +102,20 @@ abstract class EdfaPayNotifications
 
     public function getAmount(): string
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['amount'];
-        else
+        } else {
             return $this->responseArray['order_amount'];
+        }
     }
 
     public function getType(): string
     {
-        if ($this->isCard())
+        if ($this->isCard()) {
             return $this->responseArray['action'];
-        else
+        } else {
             return $this->responseArray['type'];
+        }
     }
 
     public function getJsonResponse(): string
